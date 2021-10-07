@@ -3,7 +3,7 @@ import handlebars from "express-handlebars";
 import http from "http";
 import path from "path";
 import { Server }from "socket.io";
-import Utils, { getMessages, updateMessages } from './utils';
+import Utils, { getMessages, updateMessages, getProductsMock} from './utils';
 
 const app = express();
 const router = express.Router();
@@ -12,7 +12,7 @@ const ioServer = new Server(server);
 const port = 8080;
 
 server.listen(port, () => {
-  console.log(`Server escuchando en port ${port}`);
+  console.log(`Server listening on the port ${port}`);
 });
 
 server.on("error", (error) => {
@@ -56,6 +56,15 @@ app.get("/productos/vista", async (_: Request, res: Response) => {
   const data = await Utils.getAllProducts();
   res.render("main.hbs", { data });
 });
+
+///////////////////////////////////
+
+app.get("/productos/vista-test/", async (req: Request, res: Response) => {
+  const data = getProductsMock(Number(req.query.cant));
+  res.render("main.hbs", { data });
+});
+
+///////////////////////////////////
 
 router.get('/productos/listar', async (_: Request, res: Response) => {
   const products = await Utils.getAllProducts();

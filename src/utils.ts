@@ -2,6 +2,7 @@ import { Product, Message } from './types';
 import mongoose from 'mongoose';
 import { prodModel } from './models/products';
 import { msgModel } from './models/messages';
+import faker from 'faker';
 
 class Utils {
   static async connectToDb() {
@@ -69,6 +70,25 @@ export const updateMessages = async (message: Message[]) => {
   } catch (error) {
     console.error(error);
   };
+};
+
+export const getProductsMock = (cant: number) => {
+  faker.locale = "es";
+
+  const cantidadAGenerar = isNaN(cant) ? 10 : cant;
+  const data: Product[] = [];
+
+  for (let index = 0; index < cantidadAGenerar; index++) {
+    let id = 0;
+    let price = Number(faker.commerce.price());
+    data.push({
+      id: ++id,
+      title: faker.name.title(),
+      price,
+      thumbnail: faker.image.imageUrl(),
+    });
+  };
+  return data;
 };
 
 export default Utils;
